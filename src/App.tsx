@@ -40,6 +40,17 @@ function accountLink(address: PublicKey): string {
   return `https://explorer.solana.com/address/${address.toBase58()}?cluster=${explorerCluster}`;
 }
 
+function findAvailableTaskId(tasks: TodoTask[], requestedId: number): number {
+  const usedIds = new Set(tasks.map((task) => Number(task.id)));
+  let nextId = requestedId;
+
+  while (usedIds.has(nextId)) {
+    nextId += 1;
+  }
+
+  return nextId;
+}
+
 function App() {
   const { connection } = useConnection();
   const { publicKey, connected, disconnecting, disconnect, sendTransaction, signTransaction } =
@@ -123,6 +134,16 @@ function App() {
     try {
       const accounts = await fetchTasksForAuthority(connection, publicKey, programId);
       setTasks(accounts);
+      const highestId = accounts.reduce(
+        (highest, task) => Math.max(highest, Number(task.id)),
+        0
+      );
+      setTaskId((currentId) => {
+        const current = Number(currentId);
+        return Number.isInteger(current) && current > highestId
+          ? currentId
+          : (highestId + 1).toString();
+      });
       setStatus(
         accounts.length === 0
           ? "No tasks yet. Create one with a signed Devnet transaction."
@@ -185,22 +206,19 @@ function App() {
       return;
     }
 
-    const parsedId = Number(taskId);
+    const requestedId = Number(taskId);
     const normalizedTitle = title.trim();
     const normalizedDescription = description.trim();
 
-    if (!Number.isInteger(parsedId) || parsedId < 0) {
+    if (!Number.isInteger(requestedId) || requestedId < 0) {
       setError("Task ID must be a non-negative integer.");
       return;
     }
 
+    const parsedId = findAvailableTaskId(tasks, requestedId);
+
     if (normalizedTitle.length === 0) {
       setError("Title is required.");
-      return;
-    }
-
-    if (tasks.some((task) => task.id === BigInt(parsedId))) {
-      setError(`Task ${parsedId} already exists for this wallet. Choose another ID.`);
       return;
     }
 
@@ -226,7 +244,11 @@ function App() {
       });
 
       setLastSignature(signature);
-      setStatus(`Task ${parsedId} created on Devnet.`);
+      setStatus(
+        parsedId === requestedId
+          ? `Task ${parsedId} created on Devnet.`
+          : `Task ID ${requestedId} already existed. Created task ${parsedId} on Devnet.`
+      );
       setTitle("");
       setDescription("");
       const [createdTaskPda] = deriveTaskPda(programId, publicKey, BigInt(parsedId));
