@@ -61,6 +61,7 @@ function App() {
   const describedTasks = tasks.filter((task) => task.description.trim().length > 0).length;
   const nextSuggestedId =
     tasks.length === 0 ? "1" : (tasks[tasks.length - 1].id + 1n).toString();
+  const walletLabel = connected && publicKey ? formatWallet(publicKey) : "Connect Wallet";
 
   useEffect(() => {
     if (!connected || !publicKey) {
@@ -297,7 +298,7 @@ function App() {
           <header className="topbar">
             <a className="brand" href="#dashboard"><span className="brand-mark">✓</span><span>Solana Tasks</span></a>
             <nav className="nav-links"><a className="nav-link nav-link--active" href="#dashboard">Dashboard</a><a className="nav-link" href="#tasks">My Tasks</a></nav>
-            <div className="topbar__actions"><span className="network-pill"><i /> Devnet</span><WalletMultiButton /></div>
+            <div className="topbar__actions"><span className="network-pill"><i /> Devnet</span><WalletMultiButton>{walletLabel}</WalletMultiButton></div>
           </header>
 
           <main className="main-content" id="dashboard">
