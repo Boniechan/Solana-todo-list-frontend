@@ -45,8 +45,8 @@ const WalletModalProviderCompat =
 (globalThis as typeof globalThis & { Buffer: typeof Buffer }).Buffer = Buffer;
 window.Buffer = window.Buffer ?? Buffer;
 
-const network = WalletAdapterNetwork.Testnet;
-const endpoint = import.meta.env.VITE_SOLANA_RPC_URL ?? clusterApiUrl("testnet");
+const network = WalletAdapterNetwork.Devnet;
+const endpoint = import.meta.env.VITE_SOLANA_RPC_URL ?? clusterApiUrl("devnet");
 const wallets = [new PhantomWalletAdapter(), new SolflareWalletAdapter({ network })];
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
