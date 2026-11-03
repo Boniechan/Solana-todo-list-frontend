@@ -671,3 +671,26 @@ body { background: var(--bg); }
   .calendar-day { min-height: 88px; }
   .calendar-month { display: none; }
 }
+
+.theme-toggle { display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid var(--border); border-radius: 8px; color: var(--muted); background: var(--surface); font-size: 17px; }
+.theme-toggle:hover { color: var(--accent); border-color: #c9a9ef; }
+.theme-dark { --bg: #111113; --surface: #1b1b1f; --border: #303037; --text: #f4f4f5; --muted: #a1a1aa; --accent-soft: #2b1b41; --danger: #f06b7d; background: var(--bg); color: var(--text); }
+.theme-dark .topbar { border-color: var(--border); background: rgba(27,27,31,.94); }
+.theme-dark .brand, .theme-dark .nav-link--active, .theme-dark .section-heading h2, .theme-dark .planning-heading h2, .theme-dark .task-card h3, .theme-dark .stat-card strong { color: var(--text); }
+.theme-dark .nav-link { color: var(--muted); }
+.theme-dark .nav-link--active { border-color: var(--accent); }
+.theme-dark .stat-card, .theme-dark .planning-panel, .theme-dark .task-card, .theme-dark .empty-state, .theme-dark .modal { border-color: var(--border); background: var(--surface); box-shadow: 0 7px 22px rgba(0,0,0,.18); }
+.theme-dark .icon-button, .theme-dark .theme-toggle, .theme-dark .calendar-day { border-color: var(--border); color: var(--muted); background: var(--surface); }
+.theme-dark .calendar-day--today, .theme-dark .calendar-day--selected { color: #d9b8ff; border-color: var(--accent); background: var(--accent-soft); }
+.theme-dark .calendar-day strong { color: var(--text); }
+.theme-dark .calendar-day--today strong { color: white; background: var(--accent); }
+.theme-dark .calendar-day i { color: #d9b8ff; background: #3a2455; }
+.theme-dark .task-card--complete h3, .theme-dark .task-card__description, .theme-dark .planning-empty { color: var(--muted); }
+.theme-dark .ghost-button { color: var(--text); background: #2a2a30; }
+.theme-dark .modal-copy, .theme-dark .modal .task-form label { color: var(--muted); }
+.theme-dark .modal-close { color: var(--muted); }
+.theme-dark .modal-close:hover { background: #2a2a30; }
+.theme-dark .modal .task-form input, .theme-dark .modal .task-form textarea { border-color: var(--border); color: var(--text); background: #141418; }
+.theme-dark .modal .task-form input:focus, .theme-dark .modal .task-form textarea:focus { border-color: var(--accent); }
+.theme-dark .activity-line, .theme-dark .task-card__meta { color: var(--muted); }
+.theme-dark .empty-icon { background: var(--accent-soft); }

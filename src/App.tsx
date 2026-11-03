@@ -75,6 +75,9 @@ function App() {
   const [taskDueDate, setTaskDueDate] = useState("");
   const [selectedDate, setSelectedDate] = useState(todayKey());
   const [activeView, setActiveView] = useState<"dashboard" | "tasks">("dashboard");
+  const [darkMode, setDarkMode] = useState(
+    () => window.localStorage.getItem("solana-tasks-theme") === "dark"
+  );
 
   const editingTask =
     editingKey === null
@@ -113,6 +116,10 @@ function App() {
       setTaskMeta({});
     }
   }, [publicKey]);
+
+  useEffect(() => {
+    window.localStorage.setItem("solana-tasks-theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
 
   useEffect(() => {
     if (editingKey !== null && editingTask === null) {
@@ -379,11 +386,11 @@ function App() {
       };
 
       return (
-        <div className="app-shell">
+        <div className={`app-shell${darkMode ? " theme-dark" : ""}`}>
           <header className="topbar">
             <a className="brand" href="#dashboard"><span className="brand-mark">✓</span><span>Solana Tasks</span></a>
             <nav className="nav-links"><button className={`nav-link${activeView === "dashboard" ? " nav-link--active" : ""}`} onClick={() => setActiveView("dashboard")} type="button">Dashboard</button><button className={`nav-link${activeView === "tasks" ? " nav-link--active" : ""}`} onClick={() => setActiveView("tasks")} type="button">My Tasks</button></nav>
-            <div className="topbar__actions"><span className="network-pill"><i /> Devnet</span><WalletMultiButton>{walletLabel}</WalletMultiButton></div>
+            <div className="topbar__actions"><span className="network-pill"><i /> Devnet</span><button className="theme-toggle" aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"} onClick={() => setDarkMode((current) => !current)} title={darkMode ? "Switch to light mode" : "Switch to dark mode"} type="button">{darkMode ? "☀" : "☾"}</button><WalletMultiButton>{walletLabel}</WalletMultiButton></div>
           </header>
           <main className="main-content" id="dashboard">
             <section className="dashboard-header"><div><p className="eyebrow">{activeView === "dashboard" ? "Workspace overview" : "On-chain workspace"}</p><h1>{activeView === "dashboard" ? "Manage your tasks." : "My tasks."}</h1><p className="lede">{activeView === "dashboard" ? "Your productivity, secured on Solana." : "Every task, status, and due date in one place."}</p></div><button className="primary-button create-button" disabled={!connected || busyAction !== null} onClick={openCreateModal} type="button"><span>＋</span> Create Task</button></section>
